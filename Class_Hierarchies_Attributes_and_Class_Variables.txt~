@@ -1,0 +1,150 @@
+It makes sense to create a class hierarchy in which one class may be a ‘special
+type’ of some other (‘ancestor’) class, in which case it will automatically inherit
+the features of its ancestor.
+
+Class Hierarchies – Ancestors and Descendants:
+----------------------------------------------
+
+Each class in Ruby has only one
+parent. It may, however, descend from a long and distinguished fam-
+ily tree with many generations of parents, grandparents, great-
+grandparents and so on ....
+
+As a general rule, when creating a class hierarchy, the classes with the most
+generalised behaviour are higher up the hierarchy than classes with more
+specialist behaviour.
+
+
+Instance variables generally cannot (and should not) be directly accessed from
+the world outside the class itself due the principle of encapsulation
+
+In order to obtain the value of each variable we need a get
+accessor method such as get_name; in order to assign a new value we need a set
+accessor method such as set_name.
+
+
+SUPERCLASSES AND SUBCLASSES:
+----------------------------
+
+class Treasure < Thing
+
+The angle bracket, < ,indicates that Treasure is a ‘subclass’, or descendant, of
+Thing and therefore it inherits the data (variables) and behaviour (methods) from
+the Thing class.
+
+using the super keyword, to the
+initialize method of the superclass (Thing)
+
+super( aName, aDescription )
+When used inside a method, the super keyword calls a method with the same
+name as the current method in the ancestor or ‘super’ class. If the super keyword
+is used on its own, without any arguments being specified, all the arguments
+sent to the current method are passed to the ancestor method. 
+
+PASSING ARGUMENTS TO THE SUPERCLASS:
+------------------------------------
+
+Brackets matter when calling the superclass! If the argument list is empty and no
+brackets are used, all arguments are passed to the superclass. But if the argument
+list is empty and brackets are used, no arguments are passed to the superclass:
+
+# This passes a, b, c to the superclass
+def initialize( a, b, c, d, e, f )
+super( a, b, c )
+end
+
+# This passes a, b, c to the superclass
+def initialize( a, b, c )
+super
+end
+
+# This passes no arguments to the superclass
+def initialize( a, b, c)
+super()
+end
+
+ACCESSOR METHODS:
+-----------------
+
+‘SET’ ACCESSORS:
+----------------
+
+When you write a set accessor in this way, you must append the = character to
+the method name, not merely place it somewhere between the method name and
+the arguments.
+
+So this is correct:
+def name=( aName )
+
+But this is an error:
+def name = ( aName )
+
+
+ATTRIBUTE READERS AND WRITERS:
+------------------------------
+
+In fact, there is a simpler and shorter way of achieving the same result. All you
+have to do is use two special methods, attr_reader and attr_writer, followed
+by a symbol like this:
+
+attr_reader :description
+attr_writer :description
+
+You should add this code inside your class definition like this:
+
+class Thing
+ attr_reader :description
+ attr_writer :description
+ # maybe some more methods here...
+end
+
+Calling attr_reader with a symbol has the effect of creating a get accessor (here
+named description) for an instance variable (@description) with a name match-
+ing the symbol (:description).
+
+Calling attr_writer similarly creates a set accessor for an instance variable.
+Instance variables are considered to be the ‘attributes’ of an object, which is why
+the attr_reader and attr_writer methods are so named.
+
+Symbols:
+--------
+
+In Ruby, a symbol is a name preceded by a colon (for example, :description).
+The Symbol class is defined in the Ruby class library to
+represent names inside the Ruby interpreter. When you pass one or
+more symbols as arguments to attr_reader (which is a method of
+the Module class), Ruby creates an instance variable and a get acces-
+sor method. This accessor method returns the value of the corre-
+sponding variable; both the instance variable and the accessor
+method will take the name that was specified by the symbol. So,
+attr_reader( :description ) creates an instance variable with the
+name, @description, and an accessor method named description().
+
+
+
+Attributes or Properties?:
+--------------------------
+
+Don’t be confused by the terminology. In Ruby, an ‘attribute’ is the
+equivalent of what many programming languages call a ‘property’.
+
+When you want both to read and to write a variable, the attr_accessor method
+provides a shorter alternative to using both attr_reader and attr_writer.
+
+calling attr_reader with a symbol actually creates a variable
+with the same name as the symbol. The attr_accessor method also does this.
+
+if I had omitted the call to the superclass, the name and description
+attributes would never be initialized. This is because Treasure.initialize over-
+rides Thing.initialize; so when a Treasure object is created, the code in
+Thing.initialize will not automatically be executed.
+
+CLASS VARIABLES:
+----------------
+
+@@num_things = 0
+The two @ characters at the start of this variable name, @@num_things, define
+this to be a ‘class variable’. 
+
+all objects derived from a specific class share the same class variables.
+
