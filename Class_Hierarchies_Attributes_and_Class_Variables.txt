@@ -148,3 +148,86 @@ this to be a ‘class variable’.
 
 all objects derived from a specific class share the same class variables.
 
+
+Ultimately all Ruby classes descend from the Object class.
+The Object class itself has no superclass and any attempt to locate its
+superclass will return nil.
+begin
+x = x.superclass
+puts(x)
+end until x == nil
+
+CONSTANTS INSIDE CLASSES:
+-------------------------
+
+There may be times when you need to access constants (identifiers beginning
+with a capital letter) declared inside a class.
+
+class X
+ A = 10
+ class Y
+ end
+end
+
+In order to access the constant A, you would need to use the special scope
+resolution operator :: like this:
+X::A
+Class names are constants, so this same operator gives you access to classes
+inside other classes. This makes it possible to create objects from ‘nested’ classes
+such as class Y inside class X:
+ob = X::Y.new
+
+PARTIAL CLASSES:
+----------------
+
+In Ruby it is not obligatory to define a class all in one place. If you wish, you can
+define a single class in separate parts of your program. When a class descends
+from a specific superclass, each subsequent partial class definition may optional-
+ly repeat the superclass in its definition using the < operator.
+
+class A
+ def a
+  puts( "a" )
+ end
+end
+
+class B < A
+ def ba1
+  puts( "ba1" )
+ end
+end
+
+class A
+ def b
+  puts( "b" )
+ end
+end
+
+class B < A
+ def ba2
+  puts( "ba2" )
+ end
+end
+
+Now, if I create a B object, all the methods of both A and B are available to it:
+ob = B.new
+ob.a
+ob.b
+ob.ba1
+ob.ba2
+
+
+You can also use partial class definitions to add features onto Ruby’s standard
+classes such as Array:
+
+class Array
+ def gribbit
+  puts( "gribbit" )
+ end
+end
+
+This adds the gribbit method to the Array class so that the following code can
+now be executed:
+
+[1,2,3].gribbit
+
